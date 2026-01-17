@@ -1,0 +1,19 @@
+{
+  "session_id": "a59cb8dc-31cf-4564-a051-39dcc04ad3e6",
+  "resume_path": "uploads\\a59cb8dc-31cf-4564-a051-39dcc04ad3e6_Ahad-CV.pdf",
+  "parsed_resume": {
+    "name": "Test User",
+    "profession": "Software Engineer",
+    "contacts": {},
+    "summary": "Mock resume parse",
+    "skills": [
+      "Python",
+      "React"
+    ],
+    "education": [],
+    "projects": [],
+    "experience": []
+  },
+  "face_image_present": false,
+  "interview": []
+}

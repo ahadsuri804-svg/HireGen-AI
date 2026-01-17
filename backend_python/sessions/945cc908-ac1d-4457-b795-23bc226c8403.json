@@ -1,0 +1,121 @@
+{
+  "session_id": "945cc908-ac1d-4457-b795-23bc226c8403",
+  "resume_path": "uploads\\945cc908-ac1d-4457-b795-23bc226c8403_Ahad-CV.pdf",
+  "parsed_resume": {
+    "name": "Abdul Ahad Khan Suri",
+    "profession": "Final-year Computer Science undergraduate",
+    "contacts": {
+      "email": "ahadsuri24@gmail.com",
+      "phone": "+92 315-4471617",
+      "linkedin": "https://www.linkedin.com/in/ahadsuri",
+      "github": "",
+      "address": "1/D, CGE Colony, Wahdat Road, Lahore, Pakistan"
+    },
+    "summary": "Passionate about leveraging technical expertise in programming, web technologies, and AI-driven solutions to deliver innovative and efficient results.",
+    "skills": [
+      "C++",
+      "Python",
+      "Java",
+      "HTML5",
+      "CSS3",
+      "JavaScript",
+      "SQL",
+      "Bootstrap",
+      "React.js",
+      "Node.js",
+      "Django",
+      "TensorFlow",
+      "Pandas",
+      "NumPy",
+      "Communication",
+      "Technical Writing",
+      "Problem-Solving",
+      "Creativity & Innovation",
+      "Leadership & Team Management",
+      "Project Collaboration"
+    ],
+    "education": [
+      {
+        "degree": "Bachelor of Science in Computer Science",
+        "institution": "The University Of Lahore, Lahore Pakistan",
+        "year": "Spring 2022 \u2013 Fall 2025"
+      },
+      {
+        "degree": "FSc Pre-Engineering",
+        "institution": "Government Graduate College Of Science, Lahore",
+        "year": "2019 \u2013 2021"
+      },
+      {
+        "degree": "Matriculation",
+        "institution": "Unique Group Of Institutions, Lahore",
+        "year": "2017 \u2013 2019"
+      }
+    ],
+    "projects": [
+      {
+        "title": "Study Group Management System",
+        "description": "Developed a web-based frontend design for students to collaborate in study groups.",
+        "technologies": [
+          "HTML",
+          "CSS",
+          "JavaScript"
+        ]
+      },
+      {
+        "title": "E-learning System",
+        "description": "Developed a web-based platform for online learning.",
+        "technologies": [
+          "HTML",
+          "CSS",
+          "JavaScript",
+          "Firebase"
+        ]
+      },
+      {
+        "title": "GPA Calculator",
+        "description": "Developed a console-based application to calculate GPA based on user input.",
+        "technologies": [
+          "C++"
+        ]
+      },
+      {
+        "title": "AI-Powered Interviewer",
+        "description": "Currently developing an AI-powered interviewer system that simulates real interview scenarios.",
+        "technologies": [
+          "Natural Language Processing",
+          "Machine Learning"
+        ]
+      }
+    ],
+    "experience": [
+      {
+        "role": "Frontend Developer",
+        "company": "Bright-line Solutions (Pvt) Ltd",
+        "duration": "June 2025 \u2013 Present",
+        "achievements": [
+          "Build and maintain user interfaces using HTML5, CSS3, JavaScript, Bootstrap, and React",
+          "Collaborate with teams to deliver responsive web applications ensuring optimal performance"
+        ]
+      },
+      {
+        "role": "Intern",
+        "company": "WebDevrs",
+        "duration": "June \u2013 August 2023",
+        "achievements": [
+          "Completed hands-on training in HTML, CSS & JavaScript focusing on responsive websites and modern CSS techniques",
+          "Implemented interactive features using JavaScript and gained practical experience through real-world projects"
+        ]
+      },
+      {
+        "role": "Trainee",
+        "company": "National Freelancing Training Program",
+        "duration": "May 2023",
+        "achievements": [
+          "Trained in WordPress development, including theme customization, plugin integration, website optimization, and freelancing best practices"
+        ]
+      }
+    ]
+  },
+  "face_image_present": false,
+  "interview": []
+}
