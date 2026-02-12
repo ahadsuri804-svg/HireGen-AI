@@ -100,7 +100,7 @@ You will be informed of the next steps in the hiring process shortly.
 We sincerely value your interest in joining our organization and wish you the best of luck.  
 
 Warm regards,  
-[DEV AI] Recruitment Team
+[HIREGEN AI] Recruitment Team
 """
 
     send_email(

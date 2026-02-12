@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# App-specific
+uploads/
+reports/
+sessions/
+resume/
+*.wav
+*.mp3
+*.mp4
+
+# Environment
+.env
+.env.local
+.env.production
+
+# Logs
+*.log
+
+# Models (download on build)
+vosk-model-*/
+*.pt
+!yolov8n.pt
+
+# Tests
+test_*.py
+verify_*.py
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+temp_*.wav
+*.tmp

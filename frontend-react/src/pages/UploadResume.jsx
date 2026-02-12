@@ -10,7 +10,7 @@ export default function UploadResume() {
   const [sessionId, setSessionId] = useState(null);
 
   async function onUpload() {
-    
+
     if (!file) return alert("⚠️ Choose a file first.");
     if (!user) return alert("⚠️ Please login first.");
 
@@ -25,7 +25,7 @@ export default function UploadResume() {
 
       setProgress(15);
 
-      const res = await fetch("http://localhost:8000/upload-resume", {
+      const res = await fetch("http://20.98.82.167/upload-resume", {
         method: "POST",
         body: formData,
       });

@@ -22,6 +22,11 @@ def parse_resume(user_id: str):
 
     print("📄 Parsing resume:", pdf_path)
 
-    face_img, structured_data = process_resume(pdf_path)
+    face_img, structured_data, text = process_resume(pdf_path)
+    
+    # Inject raw text for AI context
+    if structured_data is None: 
+        structured_data = {}
+    structured_data["raw_text"] = text
 
     return structured_data

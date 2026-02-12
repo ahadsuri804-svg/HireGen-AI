@@ -13,3 +13,5 @@ torchaudio
 fastapi
 uvicorn
 matplotlib
+mediapipe
+mediapipe

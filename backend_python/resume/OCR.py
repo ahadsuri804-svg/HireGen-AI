@@ -9,6 +9,15 @@ import logging
 from pathlib import Path
 from dotenv import load_dotenv
 from groq import Groq
+try:
+    import pytesseract
+    from PIL import Image
+    import io
+    HAS_OCR = True
+    # If tesseract is not in PATH, you might need to specify it:
+    # pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+except ImportError:
+    HAS_OCR = False
 
 # ------------------------------------------------------------------
 # ENV SETUP (force load .env from resume folder)
@@ -110,28 +119,76 @@ def contains_face_bytes(img_bytes: bytes) -> bool:
     return len(faces) > 0
 
 
+def ocr_image_to_text(img_bytes: bytes) -> str:
+    """Helper to run OCR on image bytes using pytesseract."""
+    if not HAS_OCR:
+        return ""
+    try:
+        image = Image.open(io.BytesIO(img_bytes))
+        return pytesseract.image_to_string(image)
+    except Exception as e:
+        logger.warning(f"OCR failed: {e}")
+        return ""
+
 def extract_text_from_pdf(pdf_path: Path) -> str:
     doc = fitz.open(str(pdf_path))
     merged_text = []
+    
+    total_text_len = 0
 
     for i, page in enumerate(doc, start=1):
+        # 1. Try standard text extraction
         blocks = page.get_text("blocks")
         blocks = sorted(blocks, key=lambda b: (round(b[1], 1), round(b[0], 1)))
-        text_content = "\n".join(b[4].strip() for b in blocks if b[4].strip())
-        merged_text.append(f"\n\n--- PAGE {i} ---\n\n{text_content}")
+        
+        page_text = "\n".join(b[4].strip() for b in blocks if b[4].strip())
+        
+        # 2. If page text is very short, try OCR on page image
+        if len(page_text) < 50 and HAS_OCR:
+            print(f"⚠️ Page {i} seems to be an image. Attempting OCR...")
+            pix = page.get_pixmap()
+            img_bytes = pix.tobytes("png")
+            ocr_text = ocr_image_to_text(img_bytes)
+            if len(ocr_text) > len(page_text):
+                page_text = ocr_text
+
+        merged_text.append(f"\n\n--- PAGE {i} ---\n\n{page_text}")
+        total_text_len += len(page_text)
 
     doc.close()
+    
+    if total_text_len < 50:
+        print("⚠️ Warning: Extracted text is very short. Resume might be unreadable.")
+        
     return "\n".join(merged_text)
 
 
 def extract_first_face_bytes(pdf_path: Path):
     doc = fitz.open(str(pdf_path))
-    for page_index in range(len(doc)):
+    # Limit to first 2 pages for face search to improve performance
+    max_pages = min(len(doc), 2)
+    
+    for page_index in range(max_pages):
         page = doc[page_index]
-        for img in page.get_images(full=True):
+        images = page.get_images(full=True)
+        
+        # Performance: If page has > 20 images, it's likely icons/logos. 
+        # Skip checking all of them if there are too many.
+        if len(images) > 20: 
+             print(f"⚠️ Page {page_index} has {len(images)} images. Checking only largest ones...")
+             # Maybe sort by size (width*height)? 
+             # For now, we rely on the loop filter below.
+        
+        for img in images:
             xref = img[0]
             base_image = doc.extract_image(xref)
             img_bytes = base_image["image"]
+            
+            # --- OPTIMIZATION: Skip tiny images ---
+            w, h = base_image.get("width", 0), base_image.get("height", 0)
+            if w < 60 or h < 60:
+                continue
+                
             if contains_face_bytes(img_bytes):
                 doc.close()
                 return img_bytes
@@ -141,13 +198,13 @@ def extract_first_face_bytes(pdf_path: Path):
 
 def clean_json_response(raw: str) -> str:
     cleaned = re.sub(r"```(?:json)?", "", raw, flags=re.IGNORECASE).strip("` \n")
-    match = re.search(r"\{.*\}", cleaned, re.DOTALL)
+    match = re.search(r"\{[\s\S]*\}", cleaned, re.DOTALL) # Improved regex for multiline
     return match.group(0) if match else cleaned
 
 
 def parse_resume_with_llm(text: str) -> dict:
     response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
+        model="llama-3.1-8b-instant",
         messages=[
             {
                 "role": "system",
@@ -173,9 +230,10 @@ def process_resume(pdf_path: Path):
     """
     Returns:
       face_bytes (bytes | None),
-      structured_resume (dict)
+      structured_resume (dict),
+      raw_text (str)
     """
     text = extract_text_from_pdf(pdf_path)
     structured_data = parse_resume_with_llm(text)
     face_bytes = extract_first_face_bytes(pdf_path)
-    return face_bytes, structured_data
+    return face_bytes, structured_data, text

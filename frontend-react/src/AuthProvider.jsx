@@ -9,16 +9,43 @@ export function useAuth() {
 
 export default function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [userName, setUserName] = useState("");
   const [loading, setLoading] = useState(true);
+
+  const fetchProfile = async (userId) => {
+    try {
+      const { data, error } = await supabase
+        .from("users")
+        .select("name")
+        .eq("id", userId)
+        .single();
+
+      if (!error && data) {
+        setUserName(data.name);
+      }
+    } catch (err) {
+      console.error("Error fetching profile:", err);
+    }
+  };
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      setUser(data.session?.user || null);
+      const sessionUser = data.session?.user || null;
+      setUser(sessionUser);
+      if (sessionUser) {
+        fetchProfile(sessionUser.id);
+      }
       setLoading(false);
     });
 
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user || null);
+      const sessionUser = session?.user || null;
+      setUser(sessionUser);
+      if (sessionUser) {
+        fetchProfile(sessionUser.id);
+      } else {
+        setUserName("");
+      }
       setLoading(false);
     });
 
@@ -28,10 +55,11 @@ export default function AuthProvider({ children }) {
   async function logout() {
     await supabase.auth.signOut();
     setUser(null);
+    setUserName("");
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, logout }}>
+    <AuthContext.Provider value={{ user, userName, loading, logout }}>
       {children}
     </AuthContext.Provider>
   );
